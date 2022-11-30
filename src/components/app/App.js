@@ -1,5 +1,5 @@
 import AppHeader from "../appHeader/AppHeader";
-import CharList from "../chatList/CharList";
+import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import RandomChar from "../randomChar/RandomChar";
 
