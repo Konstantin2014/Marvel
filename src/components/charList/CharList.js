@@ -1,5 +1,6 @@
 import { Component } from "react";
 
+import { nanoid } from "nanoid";
 import "./charList.scss";
 import MarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
@@ -10,22 +11,45 @@ class CharList extends Component {
     charList: [],
     loading: true,
     error: false,
+    newItemLoading: false,
+    offset: 210,
+    charEnded: false,
   };
   marvelService = new MarvelService();
 
   componentDidMount() {
+    this.onRequest();
+  }
+
+  onRequest = (offset) => {
+    this.onCharListLoading();
     this.marvelService
-      .getAllCharacters()
+      .getAllCharacters(offset)
       .then(this.onCharListLoaded)
       .catch(this.onError);
-  }
+  };
+
+  onCharListLoading = () => {
+    this.setState({ newItemLoading: true });
+  };
 
   onError = () => {
     this.setState({ loading: false, error: true });
   };
 
-  onCharListLoaded = (charList) => {
-    this.setState({ charList: charList, loading: false });
+  onCharListLoaded = (newCharList) => {
+    let ended = false;
+    if (newCharList.length < 9) {
+      ended = true;
+    }
+
+    this.setState(({ offset, charList }) => ({
+      charList: [...charList, ...newCharList],
+      loading: false,
+      newItemLoading: false,
+      offset: offset + 9,
+      charEnded: ended,
+    }));
   };
 
   renderItems(arr) {
@@ -40,7 +64,7 @@ class CharList extends Component {
       return (
         <li
           className="char__item"
-          key={item.id}
+          key={nanoid(8)}
           onClick={() => {
             this.props.onCharSelected(item.id);
           }}
@@ -54,7 +78,8 @@ class CharList extends Component {
   }
 
   render() {
-    const { charList, loading, error } = this.state;
+    const { charList, loading, error, newItemLoading, offset, charEnded } =
+      this.state;
 
     const items = this.renderItems(charList);
 
@@ -67,11 +92,19 @@ class CharList extends Component {
         {errorMessage}
         {spinner}
         {content}
-        <button className="button button__main button__long">
+        <button
+          className="button button__main button__long"
+          disabled={newItemLoading}
+          style={{ display: charEnded ? "none" : "block" }}
+          onClick={() => {
+            this.onRequest(offset);
+          }}
+        >
           <div className="inner">load more</div>
         </button>
       </div>
     );
   }
 }
+
 export default CharList;
