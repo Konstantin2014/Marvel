@@ -30,7 +30,7 @@ class CharInfo extends Component {
   };
 
   onCharLoaded = (char) => {
-    this.setState({ char: char, loading: false });
+    this.setState({ char, loading: false });
   };
 
   onCharLoading = () => {

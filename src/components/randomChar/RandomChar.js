@@ -28,7 +28,7 @@ class RandomChar extends Component {
   };
 
   onCharLoaded = (char) => {
-    this.setState({ char: char, loading: false });
+    this.setState({ char, loading: false });
   };
 
   onCharLoading = () => {
@@ -92,7 +92,11 @@ const View = ({ char }) => {
       />
       <div className="randomchar__info">
         <p className="randomchar__name">{name}</p>
-        <p className="randomchar__descr">{description}</p>
+        <p className="randomchar__descr">
+          {description.length > 0 && description.length > 150
+            ? description.slice(0, 150) + "..."
+            : description}
+        </p>
         <div className="randomchar__btns">
           <a href={homepage} className="button button__main">
             <div className="inner">homepage</div>
