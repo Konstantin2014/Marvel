@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 
-import "./comicsList.scss";
 import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
+
+import "./comicsList.scss";
 
 const ComicsList = () => {
   const [comicsList, setComicsList] = useState([]);
@@ -49,7 +50,7 @@ const ComicsList = () => {
         </li>
       );
     });
-    return <ul className="char__grid">{items}</ul>;
+    return <ul className="comics__grid">{items}</ul>;
   }
 
   const items = renderItems(comicsList);
